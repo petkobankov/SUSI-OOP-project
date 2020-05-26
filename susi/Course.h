@@ -1,8 +1,8 @@
 #pragma once
 class Course {//Учебната дисциплина
     char* name; //Име на учебната дисциплина
-    char type; //задължителна / избираема
-    int year; //в кой курс може да бъде записана
+    bool mandatory; //true - задължителна false - избираема
+    int neededYear; //в кой курс може да бъде записана
     double grade;
 public:
     
