@@ -21,7 +21,7 @@
     <ClCompile Include="Student.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Grade.cpp">
+    <ClCompile Include="SusiController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,12 +36,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SusiController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Grade.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnrolledCourse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

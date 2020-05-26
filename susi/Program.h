@@ -2,7 +2,7 @@
 #include "Course.h"
 class Program {  // специалност
     char* name;
-    const Course** courses;
+    Course** courses;
 public:
     
 };

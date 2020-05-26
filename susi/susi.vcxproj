@@ -147,14 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Grade.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="susi.cpp" />
+    <ClCompile Include="SusiController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Course.h" />
-    <ClInclude Include="EnrolledCourse.h" />
-    <ClInclude Include="Grade.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="SusiController.h" />
