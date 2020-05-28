@@ -6,4 +6,7 @@ class Course {//Учебната дисциплина
     double grade;
 public:
     bool isMandatory()const;
+    const char* getName()const;
+    int getNeededYear()const;
+    bool hasTheSameName(const char* name)const;
 };

@@ -3,17 +3,22 @@
 #include <iostream>
 bool SusiController::changeProgram(int _fn, const char* _newProgram)
 {
-	int id = findProgramByName(_newProgram);
-	if (id < 0)
+	//Помощна функция която взима имената на учебните дисцпилини, които са за курса който е студента или за по-малки курсове и ги праща на обекта студент който ще използва инфомрацията да сфери дали може да се прехвърли
+	int studentId = findStudentByFn(_fn);
+	int programId = findProgramByName(_newProgram);
+	if (programId < 0)
 		return false;
-
-	for (int i = 0; i < programsCurrent; i++) {
-
-	}
-	return true;
+	int limit;
+	int studentYear = students[studentId]->getStudentYear();
+	students[studentId]->changeProgram(
+		programs[programId]->listOfCourseNames(studentYear,limit),
+		limit,
+		_newProgram
+		);
 }
 int SusiController::findStudentByFn(int _fn) const
 {
+	//Помощна функция за намиране на номер на студент в масива със студенти с даден факултетен номер
 	for (int i = 0; i < studentsCurrent; i++) {
 		if (students[i]->getFn() == _fn)
 			return i;
@@ -23,6 +28,7 @@ int SusiController::findStudentByFn(int _fn) const
 
 int SusiController::findProgramByName(const char* programName) const
 {
+	//Помощна функция за намиране на специалност по име
 	for (int i = 0; i < programsCurrent; i++) {
 		if (programs[i]->hasTheSameName(programName))
 			return i;
@@ -32,6 +38,7 @@ int SusiController::findProgramByName(const char* programName) const
 
 bool SusiController::enroll(int _fn, const char* _program, int _group, const char* _name)
 {
+	//Записване на нов студент в университета
 	if (studentsCurrent == studentsCapacity)
 		;//resizeStudents();
 	students[studentsCurrent++] = new Student(_fn,_program,_group,1,_name);
@@ -40,6 +47,7 @@ bool SusiController::enroll(int _fn, const char* _program, int _group, const cha
 
 bool SusiController::advance(int _fn)
 {
+	//Записва студента в следващ курс
 	int id = findStudentByFn(_fn);
 	if (id < 0)
 		return false;
@@ -48,6 +56,7 @@ bool SusiController::advance(int _fn)
 
 bool SusiController::change(int _fn, const char* option, const char* value)
 {
+	//Прехвърля студента с даден факултетен номер в нова специялност/група/курс
 	int id = findStudentByFn(_fn);
 	if (id < 0)
 		return false;
@@ -58,4 +67,49 @@ bool SusiController::change(int _fn, const char* option, const char* value)
 	if (strcmp(option, "year") == 0)
 		return students[id]->changeYear(atoi(value));
 	return false;
+}
+
+bool SusiController::graduate(int _fn)
+{
+	//Ако съществува такъв студент извикваме функцията му за завършване
+	int id = findStudentByFn(_fn);
+	if (id < 0)
+		return false;
+	return students[id]->graduate();
+}
+
+bool SusiController::interrupt(int _fn)
+{
+	//Маркира студент като прекъснал
+	int id = findStudentByFn(_fn);
+	if (id < 0)
+		return false;
+	return students[id]->interrupt();
+}
+
+bool SusiController::resume(int _fn)
+{
+	//Маха маркировката като прекъснал
+	int id = findStudentByFn(_fn);
+	if (id < 0)
+		return false;
+	return students[id]->resume();
+}
+
+bool SusiController::print(int _fn)
+{
+	//Извежда справка за студент
+	int id = findStudentByFn(_fn);
+	if (id < 0)
+		return false;
+	return students[id]->print();
+}
+
+bool SusiController::printall(const char* _programName, int _year)
+{
+	for (int i = 0; i < studentsCurrent; i++) {
+		if (students[i]->isForProgramYear(_programName, _year))
+			students[i]->print();
+	}
+	return true;
 }
