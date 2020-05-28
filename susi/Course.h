@@ -5,5 +5,5 @@ class Course {//Учебната дисциплина
     int neededYear; //в кой курс може да бъде записана
     double grade;
 public:
-    
+    bool isMandatory()const;
 };

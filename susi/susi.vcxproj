@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Course.cpp" />
+    <ClCompile Include="Program.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="susi.cpp" />
     <ClCompile Include="SusiController.cpp" />

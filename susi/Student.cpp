@@ -32,10 +32,7 @@ int Student::getFn() const
 
 bool Student::advance()
 {
-	if (year >= 4)
-		return false;
-	year++;
-	return true;
+	return changeYear(year+1);
 }
 
 bool Student::changeGroup(int _group)
@@ -48,6 +45,15 @@ bool Student::changeYear(int _year)
 {
 	if (_year != year + 1)
 		return false;
-
+	int counter = 0;
+	for (int i = 0; i < enrolledCurrent; i++) {
+		if (enrolledCourses[i]->isMandatory())
+			counter++;
+	}
+	if (counter > 2)
+		return false;
+	if (year >= 4)
+		return false;
+	year++;
 	return true;
 }

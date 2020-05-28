@@ -6,7 +6,12 @@ class SusiController {
 	int studentsCapacity;
 	int studentsCurrent;
 	Student** students;
+	int programsCapacity;
+	int programsCurrent;
+	Program** programs;
+	bool changeProgram(int _fn, const char* _newProgram);
 	int findStudentByFn(int _fn)const;
+	int findProgramByName(const char* programName)const;
 public:
 	SusiController();
 	bool enroll(int _fn, const char* _program, int _group, const char* _name);

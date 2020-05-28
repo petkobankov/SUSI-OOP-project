@@ -1,14 +1,33 @@
 #include "SusiController.h"
 #include <cstring>
 #include <iostream>
+bool SusiController::changeProgram(int _fn, const char* _newProgram)
+{
+	int id = findProgramByName(_newProgram);
+	if (id < 0)
+		return false;
+
+	for (int i = 0; i < programsCurrent; i++) {
+
+	}
+	return true;
+}
 int SusiController::findStudentByFn(int _fn) const
 {
-	int id = -1;
 	for (int i = 0; i < studentsCurrent; i++) {
 		if (students[i]->getFn() == _fn)
-			id = i;
+			return i;
 	}
-	return id;
+	return -1;
+}
+
+int SusiController::findProgramByName(const char* programName) const
+{
+	for (int i = 0; i < programsCurrent; i++) {
+		if (programs[i]->hasTheSameName(programName))
+			return i;
+	}
+	return -1;
 }
 
 bool SusiController::enroll(int _fn, const char* _program, int _group, const char* _name)
@@ -35,7 +54,7 @@ bool SusiController::change(int _fn, const char* option, const char* value)
 	if (strcmp(option, "group") == 0)
 		return students[id]->changeGroup(atoi(value));
 	if (strcmp(option, "program") == 0)
-		return students[id]->changeProgram(value);
+		return changeProgram(_fn,value);
 	if (strcmp(option, "year") == 0)
 		return students[id]->changeYear(atoi(value));
 	return false;

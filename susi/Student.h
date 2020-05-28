@@ -13,13 +13,14 @@ class Student {
     int gradedCapacity;
     int gradedCurrent;
     Course** enrolledCourses; // Всички записани дисциплини на студента на които не е положил изпит
-    Course** gradedCourses; // Всички записани дисциплини на студента на които е положил изпит и има оценка
+    Course** gradedCourses; // Всички записани дисциплини на студента на които е положил успешно изпит
 public:
     Student(int _fn,const char* _program,int _group, int year,const char* _name);
     int getFn()const;
     bool advance();
     bool changeGroup(int _group);
     bool changeYear(int _year);
+    bool changeProgram();
     /*bool addGrade(double grade,const Course& course);
     bool addCourse(const Course& course);
     bool printProtocols()const;*/
