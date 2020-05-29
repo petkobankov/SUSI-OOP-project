@@ -4,6 +4,6 @@ using namespace std;
 
 int main()
 {
-    //SusiController sys;
+    SusiController sys;
 }
 

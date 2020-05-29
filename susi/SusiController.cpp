@@ -36,11 +36,108 @@ int SusiController::findProgramByName(const char* programName) const
 	return -1;
 }
 
+bool SusiController::resizeStudents()
+{
+	Student** tempStudents = new Student * [studentsCapacity*=2];
+	for (int i = 0; i < studentsCapacity; i++) {
+		tempStudents[i] = nullptr;
+	}
+	for (int i = 0; i < studentsCurrent; i++) {
+		tempStudents[i] = students[i];
+	}
+	delete[] students;
+	students = tempStudents;
+	return true;
+}
+
+bool SusiController::resizePrograms()
+{
+	Program** tempPrograms = new Program * [programsCapacity*=2];
+	for (int i = 0; i < programsCapacity; i++) {
+		tempPrograms[i] = nullptr;
+	}
+	for (int i = 0; i < programsCurrent; i++) {
+		tempPrograms[i] = programs[i];
+	}
+	delete[] programs;
+	programs = tempPrograms;
+	return true;
+}
+
+void SusiController::free()
+{
+	for (int i = 0; i < studentsCapacity; i++) {
+		delete students[i];
+	}
+	delete[] students;
+	for (int i = 0; i < programsCapacity; i++) {
+		delete programs[i];
+	}
+	delete[] programs;
+}
+
+void SusiController::copyFrom(const SusiController& other)
+{
+	studentsCapacity = other.studentsCapacity;
+	studentsCurrent = other.studentsCurrent;
+	students = new Student * [studentsCapacity];
+	for (int i = 0; i < studentsCapacity; i++) {
+		if (other.students[i] == nullptr)
+			students[i] = nullptr;
+		else
+			students[i] = new Student(*other.students[i]);
+	}
+	programsCapacity = other.programsCapacity;
+	programsCurrent = other.programsCurrent;
+	programs = new Program * [programsCapacity];
+	for (int i = 0; i < programsCapacity; i++) {
+		if (other.programs[i] == nullptr)
+			programs[i] = nullptr;
+		else
+			programs[i] = new Program(*other.programs[i]);
+	}
+}
+
+SusiController::SusiController()
+{
+	studentsCapacity = 4;
+	studentsCurrent = 0;
+	students = new Student * [studentsCapacity];
+	for (int i = 0; i < studentsCapacity; i++) {
+		students[i] = nullptr;
+	}
+	programsCapacity = 4;
+	programsCurrent = 0;
+	programs = new Program * [programsCapacity];
+	for (int i = 0; i < programsCapacity; i++) {
+		programs[i] = nullptr;
+	}
+}
+
+SusiController::SusiController(const SusiController& other)
+{
+	copyFrom(other);
+}
+
+SusiController& SusiController::operator=(const SusiController& other)
+{
+	if (this != &other) {
+		free();
+		copyFrom(other);
+	}
+	return *this;
+}
+
+SusiController::~SusiController()
+{
+	free();
+}
+
 bool SusiController::enroll(int _fn, const char* _program, int _group, const char* _name)
 {
 	//«аписване на нов студент в университета
 	if (studentsCurrent == studentsCapacity)
-		;//resizeStudents();
+		resizeStudents();
 	students[studentsCurrent++] = new Student(_fn,_program,_group,1,_name);
 	return true;
 }
@@ -157,4 +254,20 @@ bool SusiController::report(int _fn) const
 	if (studentId < 0)
 		return false;
 	return students[studentId]->report();
+}
+
+bool SusiController::addProgram(const char* _name)
+{
+	if (programsCapacity == programsCurrent)
+		resizePrograms();
+	programs[programsCurrent++] = new Program(_name);
+	return true;
+}
+
+bool SusiController::addCourseForProgram(const char* _programName,const char* _courseName, bool _isMandatory, int _neededYear)
+{
+	int programId = findProgramByName(_programName);
+	if (programId < 0)
+		return false;
+	return programs[programId]->addCourse(_courseName,_isMandatory, _neededYear);
 }

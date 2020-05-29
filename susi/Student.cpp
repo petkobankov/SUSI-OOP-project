@@ -1,6 +1,130 @@
 #include "Student.h"
 #include <iostream>
 using namespace std;
+void Student::free()
+{
+	delete[] name;
+	delete[] program;
+	for (int i = 0; i < enrolledCapacity; i++) {
+		delete currentCourses[i];
+	}
+	delete[] currentCourses;
+	for (int i = 0; i < gradedCapacity; i++) {
+		delete gradedCourses[i];
+	}
+	delete[] gradedCourses;
+
+}
+void Student::copyFrom(const Student& other)
+{
+	name = new char[strlen(other.name) + 1];
+	strcpy(name, other.name);
+	isGradauted = other.isGradauted;
+	isInterrupted = other.isInterrupted;
+	fn = other.fn;
+	group = other.group;
+	year = other.year;
+	program = new char[strlen(other.program) + 1];
+	strcpy(program,other.program);
+	averageGrade = other.averageGrade;
+	enrolledCapacity = other.enrolledCapacity;
+	enrolledCurrent = other.enrolledCurrent;
+	gradedCapacity = other.gradedCapacity;
+	gradedCurrent = other.gradedCurrent;
+	currentCourses = new Course * [enrolledCapacity];
+	for (int i = 0; i < enrolledCapacity; i++) {
+		if (other.currentCourses[i] == nullptr)
+			currentCourses[i] = nullptr;
+		else
+			currentCourses[i] = new Course(*other.currentCourses[i]);
+	}
+	gradedCourses = new Course * [gradedCapacity];
+	for (int i = 0; i < gradedCapacity; i++) {
+		if (other.gradedCourses[i] == nullptr)
+			gradedCourses[i] = nullptr;
+		else
+			gradedCourses[i] = new Course(*other.gradedCourses[i]);
+	}
+
+}
+bool Student::updateAverageGrade()
+{
+	double sum = 0;
+	int count = enrolledCurrent+gradedCurrent;
+	for (int i = 0; i < gradedCurrent; i++) {
+		sum += gradedCourses[i]->getGrade();
+	}
+	sum = sum + (double)enrolledCurrent*2;
+	averageGrade = sum / count;
+	return true;
+}
+bool Student::resizeEnrolled()
+{
+	Course** tempCourses = new Course * [enrolledCapacity*=2];
+	for (int i = 0; i < enrolledCapacity; i++) {
+		tempCourses[i] = nullptr;
+	}
+	for (int i = 0; i < enrolledCurrent; i++) {
+		tempCourses[i] = currentCourses[i];
+	}
+	delete[] currentCourses;
+	currentCourses = tempCourses;
+	return true;
+}
+bool Student::resizeGraded()
+{
+	Course** tempCourses = new Course * [gradedCapacity*=2];
+	for (int i = 0; i < gradedCapacity; i++) {
+		tempCourses[i] = nullptr;
+	}
+	for (int i = 0; i < gradedCurrent; i++) {
+		tempCourses[i] = gradedCourses[i];
+	}
+	delete[] gradedCourses;
+	gradedCourses = tempCourses;
+	return true;
+}
+Student::Student()
+{
+	fn = -1;
+	isGradauted = false;
+	isInterrupted = false;
+	program = new char[1];
+	program[0] = '\0';
+	group = -1;
+	year = -1;
+	name = new char[1];
+	name[0] = '\0';
+	averageGrade = 2;
+	enrolledCapacity = 4;
+	enrolledCurrent = 0;
+	gradedCapacity = 4;
+	gradedCurrent = 0;
+	currentCourses = new Course * [enrolledCapacity];
+	for (int i = 0; i < enrolledCapacity; i++) {
+		currentCourses[i] = nullptr;
+	}
+	gradedCourses = new Course * [gradedCapacity];
+	for (int i = 0; i < gradedCapacity; i++) {
+		gradedCourses[i] = nullptr;
+	}
+}
+Student::Student(const Student& other)
+{
+	copyFrom(other);
+}
+Student& Student::operator=(const Student& other)
+{
+	if (this != &other) {
+		free();
+		copyFrom(other);
+	}
+	return *this;
+}
+Student::~Student()
+{
+	free();
+}
 Student::Student(int _fn, const char* _program, int _group, int _year, const char* _name)
 {
 	fn = _fn;
@@ -98,20 +222,6 @@ bool Student::resume()
 
 bool Student::print() const
 {
-	//char* name; // Име
-	//bool isGradauted;
-	//bool isInterrupted;
-	//int fn; // Факултетен номер
-	//int group; // Група
-	//int year;//Текущо записан курс
-	//char* program; // специалност
-	//double averageGrade; // Среден успех от следването до момента
-	//int enrolledCapacity;
-	//int enrolledCurrent;
-	//int gradedCapacity;
-	//int gradedCurrent;
-	//Course** currentCourses; // Всички записани дисциплини на студента на които не е положил изпит
-	//Course** gradedCourses;
 	cout << "Information for student \"" << name << "\"" << endl;
 	if (isGradauted)
 		cout << "He has graduated" << endl;
@@ -143,8 +253,9 @@ const char* Student::getProgram() const
 bool Student::enrollin(const Course& _courseForEnroll)
 {
 	if (enrolledCapacity == enrolledCurrent)
-		;//resizeEnrolled();
+		resizeEnrolled();
 	currentCourses[enrolledCurrent++] = new Course(_courseForEnroll);
+	updateAverageGrade();
 	return true;
 }
 
@@ -154,10 +265,11 @@ bool Student::addgrade(const char* _course, double _grade)
 		if (currentCourses[i]->hasTheSameName(_course)) {
 			if (!currentCourses[i]->setGrade(_grade))
 				return false;
+			updateAverageGrade();
 			if (_grade < 3) //Ако оценката е под 3 няма да местим курса при успешно оценените
 				return true;
 			if (gradedCapacity == gradedCurrent) 
-				;// resizeGraded();
+				resizeGraded();
 			gradedCourses[gradedCurrent++] = currentCourses[i]; //оценката е >= 3 затова я местим при масива с оценени
 			for (int j = i; j < enrolledCurrent - 1; j++) { //и я махаме от масива за текущи курсове
 				currentCourses[i] = currentCourses[i + 1];

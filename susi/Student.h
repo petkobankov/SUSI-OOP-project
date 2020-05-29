@@ -15,7 +15,18 @@ class Student {
     int gradedCurrent;
     Course** currentCourses; // Всички записани дисциплини на студента на които не е положил изпит
     Course** gradedCourses; // Всички записани дисциплини на студента на които е положил успешно изпит
+
+    void free();
+    void copyFrom(const Student& other);
+    bool updateAverageGrade();
+    bool resizeEnrolled();
+    bool resizeGraded();
 public:
+    Student();
+    Student(const Student& other);
+    Student& operator=(const Student& other);
+    ~Student();
+
     Student(int _fn,const char* _program,int _group, int year,const char* _name);
     int getFn()const;
     bool advance();

@@ -1,6 +1,95 @@
 #include "Program.h"
 #include <iostream>
 
+void Program::free()
+{
+	delete[] name;
+	for (int i = 0; i < coursesCapacity; i++) {
+		delete courses[i];
+	}
+	delete[] courses;
+}
+
+void Program::copyFrom(const Program& other)
+{
+	name = new char[strlen(other.name) + 1];
+	strcpy(name, other.name);
+	coursesCapacity = other.coursesCapacity;
+	coursesCurrent = other.coursesCurrent;
+	courses = new ProgramCourse*[coursesCapacity];
+	for (int i = 0; i < coursesCapacity; i++) {
+		if (other.courses[i] == nullptr)
+			courses[i] = nullptr;
+		else
+			courses[i] = new ProgramCourse(*other.courses[i]);
+	}
+}
+
+bool Program::resizeCourse()
+{
+	ProgramCourse** tempCourses = new ProgramCourse * [coursesCapacity*=2];
+	for (int i = 0; i < coursesCapacity; i++) {
+		tempCourses[i] = nullptr;
+	}
+	for (int i = 0; i < coursesCurrent; i++) {
+		tempCourses[i] = courses[i];
+	}
+	delete[] courses;
+	courses = tempCourses;
+	return true;
+}
+
+Program::Program()
+{
+	name = new char[1];
+	name[0] = '\0';
+	coursesCapacity = 4;
+	coursesCurrent = 0;
+	courses = new ProgramCourse * [coursesCapacity];
+	for (int i = 0; i < coursesCapacity; i++) {
+		courses[i] = nullptr;
+	}
+}
+
+Program::Program(const Program& other)
+{
+	copyFrom(other);
+}
+
+Program& Program::operator=(const Program& other)
+{
+	if (this != &other) {
+		free();
+		copyFrom(other);
+	}
+	return *this;
+}
+
+Program::~Program()
+{
+	free();
+}
+
+Program::Program(const char* _name)
+{
+	name = new char[strlen(_name)+1];
+	strcpy(name, _name);
+	coursesCapacity = 4;
+	coursesCurrent = 0;
+	courses = new ProgramCourse * [coursesCapacity];
+	for (int i = 0; i < coursesCapacity; i++) {
+		courses[i] = nullptr;
+	}
+}
+
+bool Program::addCourse(const char* _courseName, bool _isMandatory, int neededYear)
+{
+	if (coursesCapacity == coursesCurrent)
+		resizeCourse();
+	courses[coursesCurrent++] = new ProgramCourse(_courseName, _isMandatory, neededYear);
+	return true;
+}
+
 bool Program::hasTheSameName(const char* _name) const
 {
 	if (strcmp(name, _name) == 0)
