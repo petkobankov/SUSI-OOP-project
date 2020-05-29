@@ -28,7 +28,8 @@ public:
     bool resume();
     bool print()const;
     bool isForProgramYear(const char* _programName, int _year)const;
-    /*bool addGrade(double grade,const Course& course);
-    bool addCourse(const Course& course);
-    bool printProtocols()const;*/
+    const char* getProgram()const;
+    bool enrollin(const Course& _courseForEnroll);
+    bool addgrade(const char* _course, double _grade);
+    bool report()const;
 };

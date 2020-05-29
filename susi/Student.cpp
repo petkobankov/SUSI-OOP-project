@@ -135,6 +135,56 @@ bool Student::isForProgramYear(const char* _programName, int _year) const
 	return true;
 }
 
+const char* Student::getProgram() const
+{
+	return program;
+}
+
+bool Student::enrollin(const Course& _courseForEnroll)
+{
+	if (enrolledCapacity == enrolledCurrent)
+		;//resizeEnrolled();
+	currentCourses[enrolledCurrent++] = new Course(_courseForEnroll);
+	return true;
+}
+
+bool Student::addgrade(const char* _course, double _grade)
+{
+	for (int i = 0; i < enrolledCurrent; i++) {
+		if (currentCourses[i]->hasTheSameName(_course)) {
+			if (!currentCourses[i]->setGrade(_grade))
+				return false;
+			if (_grade < 3) //Ако оценката е под 3 няма да местим курса при успешно оценените
+				return true;
+			if (gradedCapacity == gradedCurrent) 
+				;// resizeGraded();
+			gradedCourses[gradedCurrent++] = currentCourses[i]; //оценката е >= 3 затова я местим при масива с оценени
+			for (int j = i; j < enrolledCurrent - 1; j++) { //и я махаме от масива за текущи курсове
+				currentCourses[i] = currentCourses[i + 1];
+			}
+			currentCourses[enrolledCurrent - 1] = nullptr;
+			enrolledCurrent--;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Student::report() const
+{
+	cout << "Successful courses: " << endl;
+	for (int i = 0; i < gradedCurrent; i++) {
+		gradedCourses[i]->print();
+	}
+	cout << "Unsuccessful courses: " << endl;
+	for (int i = 0; i < enrolledCurrent; i++) {
+		currentCourses[i]->print();
+	}
+	cout << "Student overall grade: " << averageGrade << endl;
+	return true;
+}
+
+
 bool Student::changeProgram(const char** _courseList, int _limit, const char* _newProgramName)
 {
 	//Сменя специалността на студента ако е минал всички изпити за специалността, която иска да бъде

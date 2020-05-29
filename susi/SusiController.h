@@ -22,4 +22,8 @@ public:
 	bool resume(int _fn);
 	bool print(int _fn);
 	bool printall(const char* programName, int _year);
+	bool enrollin(int fn, const char* course);
+	bool addgrade(int _fn, const char* _course, double _grade);
+	bool protocol(const char* course)const;
+	bool report(int _fn)const;
 };

@@ -30,6 +30,9 @@
     <ClCompile Include="Program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProgramCourse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Student.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SusiController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramCourse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

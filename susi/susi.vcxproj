@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="Course.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="ProgramCourse.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="susi.cpp" />
     <ClCompile Include="SusiController.cpp" />
@@ -156,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Course.h" />
     <ClInclude Include="Program.h" />
+    <ClInclude Include="ProgramCourse.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="SusiController.h" />
   </ItemGroup>
