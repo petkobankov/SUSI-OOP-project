@@ -134,6 +134,42 @@ bool Program::protocol(const char* _courseName) const
 	return false;
 }
 
+const char* Program::getName() const
+{
+	return name;
+}
+
+int Program::getCoursesCapacity() const
+{
+	return coursesCapacity;
+}
+
+int Program::getCoursesCurrent() const
+{
+	return coursesCurrent;
+}
+
+int Program::getListCapacity(int _id) const
+{
+	if (_id < coursesCurrent)
+		return -1;
+	return courses[_id]->getListCapacity();
+}
+
+int Program::getListCurrent(int _id) const
+{
+	if (_id < coursesCurrent)
+		return -1;
+	return courses[_id]->getListCurrent();
+}
+
+const int* Program::getListOfEnrolled(int _id) const
+{
+	if (_id < coursesCurrent)
+		return nullptr;
+	return courses[_id]->getListOfEnrolled();
+}
+
 const Course& Program::getCourseByName(const char* _courseName)
 {
 	//Търси дали има курс с такова име в специалността, ако не дава грешка, ако да връща референция 

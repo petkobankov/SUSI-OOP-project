@@ -17,4 +17,8 @@ public:
 	ProgramCourse(const char* _name, bool _isMandatory, int neededYear);
 	bool addFn(int _fn);
 	bool protocol()const;
+
+	int getListCapacity()const;
+	int getListCurrent()const;
+	const int* getListOfEnrolled()const;
 };

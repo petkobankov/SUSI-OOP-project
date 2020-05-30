@@ -1,6 +1,7 @@
 #include "SusiController.h"
 #include <cstring>
 #include <iostream>
+#include <fstream>
 bool SusiController::changeProgram(int _fn, const char* _newProgram)
 {
 	//Помощна функция която взима имената на учебните дисцпилини, които са за курса който е студента или за по-малки курсове и ги праща на обекта студент който ще използва инфомрацията да сфери дали може да се прехвърли
@@ -74,6 +75,7 @@ void SusiController::free()
 		delete programs[i];
 	}
 	delete[] programs;
+	delete[] location;
 }
 
 void SusiController::copyFrom(const SusiController& other)
@@ -98,6 +100,17 @@ void SusiController::copyFrom(const SusiController& other)
 	}
 }
 
+const char* SusiController::getFileName(const char* _location) const
+{
+	char* temp = new char[strlen(_location) + 1];
+	strcpy(temp, _location);
+	char* fileName = strrchr(temp, '\\') + 1;
+	if (strrchr(fileName, '\"') != nullptr) {
+		fileName[strlen(fileName) - 1] = '\0';
+	}
+	return fileName;
+}
+
 SusiController::SusiController()
 {
 	studentsCapacity = 4;
@@ -112,6 +125,8 @@ SusiController::SusiController()
 	for (int i = 0; i < programsCapacity; i++) {
 		programs[i] = nullptr;
 	}
+	location = new char[1];
+	location[0] = '\0';
 }
 
 SusiController::SusiController(const SusiController& other)
@@ -270,4 +285,90 @@ bool SusiController::addCourseForProgram(const char* _programName,const char* _c
 	if (programId < 0)
 		return false;
 	return programs[programId]->addCourse(_courseName,_isMandatory, _neededYear);
+}
+
+bool SusiController::saveas(const char* _location)
+{
+	delete[] location;
+	location = new char[strlen(_location) + 1];
+	strcpy(location, _location);
+	const char* fileName = getFileName(_location);
+	std::ofstream outfile(_location,std::ios::out|std::ios::binary|std::ios::trunc);
+	
+	outfile.write((const char*)&programsCapacity, sizeof(int));
+	outfile.write((const char*)&programsCurrent, sizeof(int));
+	outfile.write((const char*)&studentsCapacity, sizeof(int));
+	outfile.write((const char*)&studentsCurrent, sizeof(int));
+	for (int i = 0; i < programsCurrent; i++) {
+		programs[i]->save(outfile);
+	}
+	for (int i = 0; i < studentsCurrent; i++) {
+		students[i]->save(outfile);
+	}
+	std::cout << "Successfully saved " << fileName << std::endl;
+	return true;
+}
+
+bool SusiController::open(const char* _location)
+{
+	delete[] location;
+	location = new char[strlen(_location) + 1];
+	strcpy(location, _location);
+	const char* fileName = getFileName(_location);
+	std::cout << "Successfully opened " << fileName << std::endl;
+	return true;
+}
+
+bool SusiController::close()
+{
+	if (!location[0]) //there is nothing to close
+		return false;
+	const char* fileName = getFileName(location);
+	std::cout << "Successfully closed " << fileName << std::endl;
+	delete[] location;
+	location = new char[1];
+	location[0] = '\0';
+	
+	return true;
+}
+
+bool SusiController::save()
+{
+	if (!location[0]) //there is nothing to save
+		return false;
+	const char* fileName = getFileName(location);
+	std::cout << "Successfully saved " << fileName << std::endl;
+	return true;
+}
+
+const bool SusiController::isLoaded() const
+{
+	return (bool)location[0];
+}
+
+bool SusiController::help()const
+{
+	using namespace std;
+	cout << "The following commands are supported: " << endl;
+	cout << "open <file>" << "    " << "opens <file>" << endl;
+	cout << "close" << "    " << "closes currently opened file" << endl;
+	cout << "save" << "    " << "saves the currently open file" << endl;
+	cout << "saveas <file>" << "    " << "saves the currently open file in <file>" << endl;
+	cout << "help" << "    " << "prints this information" << endl;
+	cout << "exit" << "    " << "exists the program" << endl;
+	cout << "enroll <fn><program><group><name>" << "    " << "enrolls student with name <name> in first year in program <program> in group <group> and with faculty number <fn>" << endl;
+	cout << "advance <fn>" << "    " << "takes the student to the next year" << endl;
+	cout << "change <fn><option><value>" << "    " << "<option> can be either 'program', 'group' or 'year'. Transfers student with faculty number <fn> in a new program, group or year specified with <value>" << endl;
+	cout << "graduate <fn>" << "    " << "marks the student with faculty number <fn> as graduated" << endl;
+	cout << "interrupt <fn>" << "    " << "marks the student with faculty number <fn> as interrupted. Interrupted students can't take exams, enrol in courses or change program, group or year" << endl;
+	cout << "resume <fn>" << "    " << "restores student rights to the student with faculty number <fn>" << endl;
+	cout << "print <fn>" << "    " << "prints out a reference for the student with faculty number <fn>" << endl;
+	cout << "printall <program><year>" << "    " << "prints out a reference for all students in program <program> and year <year>" << endl;
+	cout << "enrollin <fn><course>" << "    " << "enrolls the student with faculty number <fn> in course <course>" << endl;
+	cout << "addgrade <fn><course><grade>" << "    " << "Adds a grade <grade> in course <course> for student with faculty number <fn>. You can only add a grade if a student is enrolled in that course." << endl;
+	cout << "protocol <course>" << "    " << "Prints out all the faculty numbers of students enrolled for course <course>. There is a different protocol for each program." << endl;
+	cout << "report <fn>" << "    " << "Prints out academic reference for grades of student with faculty number <fn>" << endl;
+	cout << "addprogram <program>" << "    " << "Adds a program <program> in the system" << endl;
+	cout << "addcourse <program><course><mandatory><year>" << "    " << "Adds a course <course> for program <program> which can be either mandatory or not <mandatory> (true/false) for year <year>" << endl;
+	return true;
 }

@@ -5,10 +5,11 @@
 class SusiController {
 	int studentsCapacity;
 	int studentsCurrent;
-	Student** students;
 	int programsCapacity;
 	int programsCurrent;
+	char* location;
 	Program** programs;
+	Student** students;
 
 	bool changeProgram(int _fn, const char* _newProgram);
 	int findStudentByFn(int _fn)const;
@@ -18,6 +19,7 @@ class SusiController {
 
 	void free();
 	void copyFrom(const SusiController& other);
+	const char* getFileName(const char* _location)const;
 public:
 	SusiController();
 	SusiController(const SusiController& other);
@@ -38,4 +40,10 @@ public:
 	bool report(int _fn)const;
 	bool addProgram(const char* name);
 	bool addCourseForProgram(const char* _programName,const char* _courseName, bool _isMandatory, int neededYear);
+	bool saveas(const char* _location);
+	bool open(const char* _location);
+	bool close();
+	bool save();
+	bool help()const;
+	const bool isLoaded()const;
 };

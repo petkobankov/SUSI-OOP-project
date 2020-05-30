@@ -103,3 +103,18 @@ bool ProgramCourse::protocol() const
 	}
 	return true;
 }
+
+int ProgramCourse::getListCapacity() const
+{
+	return listCapacity;
+}
+
+int ProgramCourse::getListCurrent() const
+{
+	return listCurrent;
+}
+
+const int* ProgramCourse::getListOfEnrolled() const
+{
+	return listOfEnrolled;
+}

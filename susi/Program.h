@@ -24,4 +24,10 @@ public:
     const Course& getCourseByName(const char* _courseName);
     bool enrollStudent(const char* _courseName, int _fn);
     bool protocol(const char* _courseName)const;
+    const char* getName()const;
+    int getCoursesCapacity()const;
+    int getCoursesCurrent()const;
+    int getListCapacity(int _id)const;
+    int getListCurrent(int _id)const;
+    const int* getListOfEnrolled(int _id)const;
 };

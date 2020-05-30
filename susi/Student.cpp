@@ -153,6 +153,51 @@ Student::Student(int _fn, const char* _program, int _group, int _year, const cha
 	}
 }
 
+const char* Student::getName() const
+{
+	return name;
+}
+
+bool Student::getIsGratuated() const
+{
+	return isGradauted;
+}
+
+bool Student::getIsInterrupted() const
+{
+	return isInterrupted;
+}
+
+int Student::getGroup() const
+{
+	return group;
+}
+
+double Student::getAverageGrade() const
+{
+	return averageGrade;
+}
+
+int Student::getEnrolledCapacity() const
+{
+	return enrolledCapacity;
+}
+
+int Student::getEnrolledCurrent() const
+{
+	return enrolledCurrent;
+}
+
+int Student::getGradedCapacity() const
+{
+	return gradedCapacity;
+}
+
+int Student::getGradedCurrent() const
+{
+	return gradedCurrent;
+}
+
 int Student::getFn() const
 {
 	return fn;
@@ -250,6 +295,46 @@ bool Student::isForProgramYear(const char* _programName, int _year) const
 const char* Student::getProgram() const
 {
 	return program;
+}
+
+const char* Student::getECourseName(int _id) const
+{
+	return currentCourses[_id]->getName();
+}
+
+bool Student::getECourseType(int _id) const
+{
+	return currentCourses[_id]->isMandatory();
+}
+
+int Student::getECourseYear(int _id) const
+{
+	return currentCourses[_id]->getNeededYear();
+}
+
+double Student::getECourseGrade(int _id) const
+{
+	return currentCourses[_id]->getGrade();
+}
+
+const char* Student::getGCourseName(int _id) const
+{
+	return gradedCourses[_id]->getName();
+}
+
+bool Student::getGCourseType(int _id) const
+{
+	return gradedCourses[_id]->isMandatory();
+}
+
+int Student::getGCourseYear(int _id) const
+{
+	return gradedCourses[_id]->getNeededYear();
+}
+
+double Student::getGCourseGrade(int _id) const
+{
+	return gradedCourses[_id]->getGrade();
 }
 
 bool Student::enrollin(const Course& _courseForEnroll)

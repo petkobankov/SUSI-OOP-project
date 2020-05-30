@@ -28,19 +28,38 @@ public:
     ~Student();
 
     Student(int _fn,const char* _program,int _group, int year,const char* _name);
-    int getFn()const;
     bool advance();
     bool changeGroup(int _group);
     bool changeYear(int _year);
     bool changeProgram(const char** _courseList, int _limit,const char* _newProgramName);
-    int getStudentYear()const;
     bool graduate();
     bool interrupt();
     bool resume();
     bool print()const;
     bool isForProgramYear(const char* _programName, int _year)const;
-    const char* getProgram()const;
     bool enrollin(const Course& _courseForEnroll);
     bool addgrade(const char* _course, double _grade);
     bool report()const;
+
+    const char* getName()const;
+    bool getIsGratuated()const;
+    bool getIsInterrupted()const;
+    int getGroup()const;
+    double getAverageGrade()const;
+    int getEnrolledCapacity()const;
+    int getEnrolledCurrent()const;
+    int getGradedCapacity()const;
+    int getGradedCurrent()const;
+    int getFn()const;
+    int getStudentYear()const;
+    const char* getProgram()const;
+
+    const char* getECourseName(int _id)const;
+    bool getECourseType(int _id)const;
+    int getECourseYear(int _id)const;
+    double getECourseGrade(int _id)const;
+    const char* getGCourseName(int _id)const;
+    bool getGCourseType(int _id)const;
+    int getGCourseYear(int _id)const;
+    double getGCourseGrade(int _id)const;
 };
