@@ -308,6 +308,7 @@ bool Student::save(std::ofstream& outfile)
 	outfile.write((const char*)&group, sizeof(int));
 	outfile.write((const char*)&year, sizeof(int));
 	int programLen = strlen(program);
+	outfile.write((const char*)&programLen, sizeof(int));
 	outfile.write((const char*)program, programLen);
 	outfile.write((const char*)&averageGrade, sizeof(double));
 	outfile.write((const char*)&enrolledCapacity, sizeof(int));
@@ -319,6 +320,54 @@ bool Student::save(std::ofstream& outfile)
 	}
 	for (int i = 0; i < gradedCurrent; i++) {
 		gradedCourses[i]->save(outfile);
+	}
+	return true;
+}
+
+bool Student::open(std::ifstream& infile)
+{
+	free();
+	int nameLen;
+	infile.read((char*)&nameLen, sizeof(int));
+	name = new char[nameLen + 1];
+	char* _name = new char[nameLen + 1];
+	infile.read(_name, nameLen);
+	_name[nameLen] = '\0';
+	strcpy(name, _name);
+	infile.read((char*)&isGradauted, sizeof(bool));
+	infile.read((char*)&isInterrupted, sizeof(bool));
+	infile.read((char*)&fn, sizeof(int));
+	infile.read((char*)&group, sizeof(int));
+	infile.read((char*)&year, sizeof(int));
+	int programLen;
+	infile.read((char*)&programLen, sizeof(int));
+	program = new char[programLen + 1];
+	char* _program = new char[programLen + 1];
+	infile.read(_program, programLen);
+	_program[programLen] = '\0';
+	strcpy(program, _program);
+	infile.read((char*)&averageGrade, sizeof(double));
+	infile.read((char*)&enrolledCapacity, sizeof(int));
+	infile.read((char*)&enrolledCurrent, sizeof(int));
+	infile.read((char*)&gradedCapacity, sizeof(int));
+	infile.read((char*)&gradedCurrent, sizeof(int));
+	currentCourses = new Course *[enrolledCapacity];
+	for (int i = 0; i < enrolledCapacity; i++) {
+		if(i>= enrolledCurrent)
+		currentCourses[i]=nullptr;
+		else {
+			currentCourses[i] = new Course();
+			currentCourses[i]->open(infile);
+		}
+	}
+	gradedCourses = new Course * [gradedCapacity];
+	for (int i = 0; i < gradedCapacity; i++) {
+		if(i>= gradedCurrent)
+		gradedCourses[i]=nullptr;
+		else {
+			gradedCourses[i] = new Course();
+			gradedCourses[i]->open(infile);
+		}
 	}
 	return true;
 }

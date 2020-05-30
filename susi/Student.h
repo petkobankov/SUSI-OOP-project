@@ -55,5 +55,6 @@ public:
     const char* getProgram()const;
 
     bool save(std::ofstream& outfile);
+    bool open(std::ifstream& infile);
 
 };

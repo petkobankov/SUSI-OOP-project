@@ -41,6 +41,7 @@ bool Program::resizeCourse()
 
 Program::Program()
 {
+	free();
 	name = new char[1];
 	name[0] = '\0';
 	coursesCapacity = 4;
@@ -187,12 +188,18 @@ bool Program::open(std::ifstream& infile)
 {
 	int nameLen;
 	infile.read((char*)&nameLen, sizeof(int));
-	name = new char[nameLen+1];
-	infile.read(name, nameLen);
-	name[nameLen] = '\0';
+	char* _name = new char[nameLen+1];
+	name = new char[nameLen + 1];
+	infile.read(_name, nameLen);
+	_name[nameLen] = '\0';
+	strcpy(name, _name);
 	infile.read((char*)&coursesCapacity, sizeof(int));
 	infile.read((char*)&coursesCurrent, sizeof(int));
+	for (int i = 0; i < coursesCapacity; i++) {
+		courses[i]=nullptr;
+	}
 	for (int i = 0; i < coursesCurrent; i++) {
+		courses[i]=new ProgramCourse();
 		courses[i]->open(infile);
 	}
 	return true;

@@ -11,7 +11,7 @@ bool SusiController::changeProgram(int _fn, const char* _newProgram)
 		return false;
 	int limit=-1;
 	int studentYear = students[studentId]->getStudentYear();
-	students[studentId]->changeProgram(
+	return students[studentId]->changeProgram(
 		programs[programId]->listOfCourseNames(studentYear,limit),
 		limit,
 		_newProgram
@@ -39,12 +39,12 @@ int SusiController::findProgramByName(const char* programName) const
 
 bool SusiController::resizeStudents()
 {
-	Student** tempStudents = new Student * [studentsCapacity*=2];
+	Student** tempStudents = new Student * [studentsCapacity *= 2];
 	for (int i = 0; i < studentsCapacity; i++) {
-		tempStudents[i] = nullptr;
-	}
-	for (int i = 0; i < studentsCurrent; i++) {
-		tempStudents[i] = students[i];
+		if(i>=studentsCurrent)
+			tempStudents[i] = nullptr;
+		else 
+			tempStudents[i] = students[i];
 	}
 	delete[] students;
 	students = tempStudents;
@@ -67,15 +67,16 @@ bool SusiController::resizePrograms()
 
 void SusiController::free()
 {
-	for (int i = 0; i < studentsCapacity; i++) {
-		delete students[i];
-	}
-	delete[] students;
 	for (int i = 0; i < programsCapacity; i++) {
 		delete programs[i];
 	}
 	delete[] programs;
-	delete[] location;
+	for (int i = 0; i < studentsCapacity; i++) {
+		delete students[i];
+	}
+	delete[] students;
+	
+	
 }
 
 void SusiController::copyFrom(const SusiController& other)
@@ -151,6 +152,7 @@ SusiController& SusiController::operator=(const SusiController& other)
 SusiController::~SusiController()
 {
 	free();
+	delete[] location;
 }
 
 bool SusiController::enroll(int _fn, const char* _program, int _group, const char* _name)
@@ -353,15 +355,29 @@ bool SusiController::open(const char* _location)
 	}
 
 	infile.seekg(0, std::ios::beg);
+	free();
 	infile.read((char*)&programsCapacity, sizeof(int));
 	infile.read((char*)&programsCurrent, sizeof(int));
 	infile.read((char*)&studentsCapacity, sizeof(int));
 	infile.read((char*)&studentsCurrent, sizeof(int));
-	for (int i = 0; i < programsCurrent; i++) {
-		programs[i]->open(infile);
+	programs = new Program * [programsCapacity];
+	for (int i = 0; i < programsCapacity; i++) {
+		if(i>=programsCurrent)
+			programs[i] = nullptr;
+		else {
+			programs[i] = new Program();
+			programs[i]->open(infile);
+		}		
 	}
-	for (int i = 0; i < studentsCurrent; i++) {
-		students[i]->open(infile);
+	students = new Student * [studentsCapacity];
+	for (int i = 0; i < studentsCapacity; i++) {
+		if (i >= studentsCurrent)
+			students[i] = nullptr;
+		else {
+			students[i] = new Student();
+			students[i]->open(infile);
+		}
+		
 	}
 	infile.close();
 	std::cout << "Successfully opened " << fileName << std::endl;
@@ -370,8 +386,9 @@ bool SusiController::open(const char* _location)
 
 bool SusiController::close()
 {
-	if (!isLoaded())
-		throw "No file is opened!";
+	if (!isLoaded()) {
+		return true;
+	}
 	const char* fileName = getFileName(location);
 	std::cout << "Successfully closed " << fileName << std::endl;
 	delete[] location;

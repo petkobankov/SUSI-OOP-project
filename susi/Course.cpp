@@ -107,11 +107,14 @@ bool Course::save(std::ofstream& outfile)
 
 bool Course::open(std::ifstream& infile)
 {
+	free();
 	int nameLen;
 	infile.read((char*)&nameLen, sizeof(int));
 	name = new char[nameLen + 1];
-	infile.read(name, nameLen);
-	name[nameLen] = '\0';
+	char* _name = new char[nameLen + 1];
+	infile.read(_name, nameLen);
+	_name[nameLen] = '\0';
+	strcpy(name, _name);
 	infile.read((char*)&mandatory, sizeof(bool));
 	infile.read((char*)&neededYear, sizeof(int));
 	infile.read((char*)&grade, sizeof(double));
