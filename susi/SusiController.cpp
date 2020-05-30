@@ -222,9 +222,9 @@ bool SusiController::enrollin(int _fn, const char* _courseName)
 		return false;
 	try{
 	const Course & foundCourse = programs[programId]->getCourseByName(_courseName);
-	if (!programs[programId]->enrollStudent(_courseName, _fn))
+	if (!students[studentId]->enrollin(foundCourse))
 		return false;
-	return students[studentId]->enrollin(foundCourse);
+	return programs[programId]->enrollStudent(_courseName, _fn);
 	}
 	catch (bool error) {
 		return error;

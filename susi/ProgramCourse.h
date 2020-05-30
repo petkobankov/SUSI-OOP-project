@@ -4,6 +4,7 @@ class ProgramCourse: public Course {
 	int listCapacity;
 	int listCurrent;
 	int* listOfEnrolled;
+	bool resizeList();
 
 	void free();
 	void copyFrom(const ProgramCourse& other);

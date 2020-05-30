@@ -1,6 +1,20 @@
 #include "ProgramCourse.h"
 #include <iostream>
 
+bool ProgramCourse::resizeList()
+{
+	int* tempList = new int [listCapacity *= 2];
+	for (int i = 0; i < listCapacity; i++) {
+		tempList[i] = -1;
+	}
+	for (int i = 0; i < listCurrent; i++) {
+		tempList[i] = listOfEnrolled[i];
+	}
+	delete[] listOfEnrolled;
+	listOfEnrolled = tempList;
+	return true;
+}
+
 void ProgramCourse::free()
 {
 	delete[] listOfEnrolled;
@@ -47,13 +61,19 @@ ProgramCourse::~ProgramCourse()
 
 ProgramCourse::ProgramCourse(const char* _name, bool _isMandatory, int _neededYear): Course(_name,_isMandatory,_neededYear)
 {
+	listCapacity = 4;
+	listCurrent = 0;
+	listOfEnrolled = new int[listCapacity];
+	for (int i = 0; i < listCapacity; i++) {
+		listOfEnrolled[i] = -1;
+	}
 }
 
 bool ProgramCourse::addFn(int _fn)
 {
 	//Добавя в списъка със записани студенти факултетния номер на нов студент. Добавя се така, че по подразбиране да са подредени в нарастващ ред така че после да е лесно извеждането на протоколи.
 	if (listCurrent == listCapacity)
-		;//resizeList();
+		resizeList();
 	if (listCurrent == 0) {
 		listOfEnrolled[listCurrent++] = _fn;
 		return true;

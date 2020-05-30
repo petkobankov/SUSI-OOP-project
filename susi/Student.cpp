@@ -54,7 +54,9 @@ bool Student::updateAverageGrade()
 	for (int i = 0; i < gradedCurrent; i++) {
 		sum += gradedCourses[i]->getGrade();
 	}
-	sum = sum + (double)enrolledCurrent*2;
+	for (int i = 0; i < enrolledCurrent; i++) {
+		sum += currentCourses[i]->getGrade();
+	}
 	averageGrade = sum / count;
 	return true;
 }
@@ -252,6 +254,8 @@ const char* Student::getProgram() const
 
 bool Student::enrollin(const Course& _courseForEnroll)
 {
+	if (_courseForEnroll.getNeededYear() > year)
+		return false;
 	if (enrolledCapacity == enrolledCurrent)
 		resizeEnrolled();
 	currentCourses[enrolledCurrent++] = new Course(_courseForEnroll);
@@ -271,8 +275,9 @@ bool Student::addgrade(const char* _course, double _grade)
 			if (gradedCapacity == gradedCurrent) 
 				resizeGraded();
 			gradedCourses[gradedCurrent++] = currentCourses[i]; //оценката е >= 3 затова € местим при масива с оценени
+
 			for (int j = i; j < enrolledCurrent - 1; j++) { //и € махаме от масива за текущи курсове
-				currentCourses[i] = currentCourses[i + 1];
+				currentCourses[i] = currentCourses[j + 1];
 			}
 			currentCourses[enrolledCurrent - 1] = nullptr;
 			enrolledCurrent--;
@@ -288,10 +293,12 @@ bool Student::report() const
 	for (int i = 0; i < gradedCurrent; i++) {
 		gradedCourses[i]->print();
 	}
+	cout << endl;
 	cout << "Unsuccessful courses: " << endl;
 	for (int i = 0; i < enrolledCurrent; i++) {
 		currentCourses[i]->print();
 	}
+	cout << endl;
 	cout << "Student overall grade: " << averageGrade << endl;
 	return true;
 }

@@ -11,9 +11,11 @@ int main()
     sys.addCourseForProgram("Computer Science", "EAI", true, 1);
     sys.addCourseForProgram("Computer Science", "OOP praktikum", false, 1);
     sys.addCourseForProgram("Computer Science", "Dizain i analiz na algoritmi", true, 2);
+
     sys.addProgram("Software Engineering");
     sys.addCourseForProgram("Software Engineering", "DIS", true, 1);
     sys.addCourseForProgram("Software Engineering", "EAI", true, 1);
+
     sys.addProgram("Maths");
     sys.addProgram("Informatics");
     sys.addProgram("Maths 2");
@@ -32,5 +34,16 @@ int main()
 
     sys.print(81854);
     //sys.printall("Computer Science",1);
+
+    sys.enrollin(81854, "Object oriented programing");
+    sys.enrollin(81854, "DIS");
+    sys.enrollin(81854, "OOP praktikum");
+    sys.enrollin(81854, "Dizain i analiz na algoritmi");
+
+    sys.addgrade(81854,"DIS",3.4);
+
+    sys.protocol("DIS");
+
+    sys.report(81854);
 }
 
