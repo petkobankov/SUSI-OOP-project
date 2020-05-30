@@ -2,6 +2,7 @@
 #include "Course.h"
 #include <cstring>
 #include "ProgramCourse.h"
+#include <fstream>
 class Program {  // специалност
     char* name;
     int coursesCapacity;
@@ -30,4 +31,5 @@ public:
     int getListCapacity(int _id)const;
     int getListCurrent(int _id)const;
     const int* getListOfEnrolled(int _id)const;
+    bool save(std::ofstream& f);
 };

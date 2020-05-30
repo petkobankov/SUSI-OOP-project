@@ -1,4 +1,5 @@
 #pragma once
+#include <fstream>
 class Course {//Учебната дисциплина
     char* name; //Име на учебната дисциплина
     bool mandatory; //true - задължителна false - избираема
@@ -22,4 +23,5 @@ public:
     bool setGrade(double _grade);
     double getGrade();
     bool print()const;
+    bool save(std::ofstream& outfile);
 };

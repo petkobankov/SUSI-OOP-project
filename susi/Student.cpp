@@ -297,45 +297,33 @@ const char* Student::getProgram() const
 	return program;
 }
 
-const char* Student::getECourseName(int _id) const
+bool Student::save(std::ofstream& outfile)
 {
-	return currentCourses[_id]->getName();
+	int nameLen = strlen(name);
+	outfile.write((const char*)&nameLen, sizeof(int));
+	outfile.write((const char*)name, nameLen);
+	outfile.write((const char*)&isGradauted, sizeof(bool));
+	outfile.write((const char*)&isInterrupted, sizeof(bool));
+	outfile.write((const char*)&fn, sizeof(int));
+	outfile.write((const char*)&group, sizeof(int));
+	outfile.write((const char*)&year, sizeof(int));
+	int programLen = strlen(program);
+	outfile.write((const char*)program, programLen);
+	outfile.write((const char*)&averageGrade, sizeof(double));
+	outfile.write((const char*)&enrolledCapacity, sizeof(int));
+	outfile.write((const char*)&enrolledCurrent, sizeof(int));
+	outfile.write((const char*)&gradedCapacity, sizeof(int));
+	outfile.write((const char*)&gradedCurrent, sizeof(int));
+	for (int i = 0; i < enrolledCurrent; i++) {
+		currentCourses[i]->save(outfile);
+	}
+	for (int i = 0; i < gradedCurrent; i++) {
+		gradedCourses[i]->save(outfile);
+	}
+	return true;
 }
 
-bool Student::getECourseType(int _id) const
-{
-	return currentCourses[_id]->isMandatory();
-}
 
-int Student::getECourseYear(int _id) const
-{
-	return currentCourses[_id]->getNeededYear();
-}
-
-double Student::getECourseGrade(int _id) const
-{
-	return currentCourses[_id]->getGrade();
-}
-
-const char* Student::getGCourseName(int _id) const
-{
-	return gradedCourses[_id]->getName();
-}
-
-bool Student::getGCourseType(int _id) const
-{
-	return gradedCourses[_id]->isMandatory();
-}
-
-int Student::getGCourseYear(int _id) const
-{
-	return gradedCourses[_id]->getNeededYear();
-}
-
-double Student::getGCourseGrade(int _id) const
-{
-	return gradedCourses[_id]->getGrade();
-}
 
 bool Student::enrollin(const Course& _courseForEnroll)
 {

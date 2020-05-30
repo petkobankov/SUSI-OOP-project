@@ -104,11 +104,13 @@ const char* SusiController::getFileName(const char* _location) const
 {
 	char* temp = new char[strlen(_location) + 1];
 	strcpy(temp, _location);
-	char* fileName = strrchr(temp, '\\') + 1;
-	if (strrchr(fileName, '\"') != nullptr) {
+	char* fileName = strrchr(temp, '\\');
+	if (fileName == nullptr)
+		throw "Error reading file";
+	if (strrchr(fileName+1, '\"') != nullptr) {
 		fileName[strlen(fileName) - 1] = '\0';
 	}
-	return fileName;
+	return fileName+1;
 }
 
 SusiController::SusiController()
@@ -305,6 +307,7 @@ bool SusiController::saveas(const char* _location)
 	for (int i = 0; i < studentsCurrent; i++) {
 		students[i]->save(outfile);
 	}
+	outfile.close();
 	std::cout << "Successfully saved " << fileName << std::endl;
 	return true;
 }
@@ -321,8 +324,8 @@ bool SusiController::open(const char* _location)
 
 bool SusiController::close()
 {
-	if (!location[0]) //there is nothing to close
-		return false;
+	if (!isLoaded())
+		throw "No file is opened!";
 	const char* fileName = getFileName(location);
 	std::cout << "Successfully closed " << fileName << std::endl;
 	delete[] location;
@@ -334,11 +337,9 @@ bool SusiController::close()
 
 bool SusiController::save()
 {
-	if (!location[0]) //there is nothing to save
-		return false;
-	const char* fileName = getFileName(location);
-	std::cout << "Successfully saved " << fileName << std::endl;
-	return true;
+	if (!isLoaded())
+		throw "No file is opened!";
+	return saveas(location);
 }
 
 const bool SusiController::isLoaded() const

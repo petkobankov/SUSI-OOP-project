@@ -6,19 +6,7 @@ int main()
 {
     
 
-    //sys.print(81854);
-    ////sys.printall("Computer Science",1);
-
-    //sys.enrollin(81854, "Object oriented programing");
-    //sys.enrollin(81854, "DIS");
-    //sys.enrollin(81854, "OOP praktikum");
-    //sys.enrollin(81854, "Dizain i analiz na algoritmi");
-
-    //sys.addgrade(81854,"DIS",3.4);
-
-    //sys.protocol("DIS");
-
-    //sys.report(81854);
+    
     char command[LENGTH];
 
     cin >> command;
@@ -50,7 +38,19 @@ int main()
     sys.enroll(12, "Informatics", 1, "Konstantin");
     sys.enroll(13, "Maths", 1, "Kristina");
 
+    sys.print(81854);
+    //sys.printall("Computer Science",1);
 
+    sys.enrollin(81854, "Object oriented programing");
+    sys.enrollin(81854, "DIS");
+    sys.enrollin(81854, "OOP praktikum");
+    sys.enrollin(81854, "Dizain i analiz na algoritmi");
+
+    sys.addgrade(81854,"DIS",3.4);
+
+    sys.protocol("DIS");
+
+    sys.report(81854);
     while (strcmp(command, "exit") != 0) {
 
         if (strcmp(command, "open") == 0) {

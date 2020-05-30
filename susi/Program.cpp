@@ -170,6 +170,19 @@ const int* Program::getListOfEnrolled(int _id) const
 	return courses[_id]->getListOfEnrolled();
 }
 
+bool Program::save(std::ofstream& outfile)
+{
+	int nameLen = strlen(name);
+	outfile.write((const char*)&nameLen, sizeof(int));
+	outfile.write((const char*)name, nameLen);
+	outfile.write((const char*)&coursesCapacity, sizeof(int));
+	outfile.write((const char*)&coursesCurrent, sizeof(int));
+	for (int i = 0; i < coursesCurrent; i++) {
+		courses[i]->save(outfile);
+	}
+	return true;
+}
+
 const Course& Program::getCourseByName(const char* _courseName)
 {
 	//Търси дали има курс с такова име в специалността, ако не дава грешка, ако да връща референция 

@@ -54,12 +54,6 @@ public:
     int getStudentYear()const;
     const char* getProgram()const;
 
-    const char* getECourseName(int _id)const;
-    bool getECourseType(int _id)const;
-    int getECourseYear(int _id)const;
-    double getECourseGrade(int _id)const;
-    const char* getGCourseName(int _id)const;
-    bool getGCourseType(int _id)const;
-    int getGCourseYear(int _id)const;
-    double getGCourseGrade(int _id)const;
+    bool save(std::ofstream& outfile);
+
 };

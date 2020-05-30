@@ -93,3 +93,14 @@ bool Course::print() const
 	std::cout << name << ", grade: " << grade << std::endl;
 	return true;
 }
+
+bool Course::save(std::ofstream& outfile)
+{
+	int nameLen = strlen(name);
+	outfile.write((const char*)&nameLen, sizeof(int));
+	outfile.write((const char*)name, nameLen);
+	outfile.write((const char*)&mandatory, sizeof(bool));
+	outfile.write((const char*)&neededYear, sizeof(int));
+	outfile.write((const char*)&grade, sizeof(double));
+	return true;
+}

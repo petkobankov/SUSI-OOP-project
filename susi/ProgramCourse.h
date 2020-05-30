@@ -21,4 +21,5 @@ public:
 	int getListCapacity()const;
 	int getListCurrent()const;
 	const int* getListOfEnrolled()const;
+	bool save(std::ofstream& outfile);
 };

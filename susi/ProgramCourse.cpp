@@ -118,3 +118,13 @@ const int* ProgramCourse::getListOfEnrolled() const
 {
 	return listOfEnrolled;
 }
+
+bool ProgramCourse::save(std::ofstream& outfile)
+{
+	Course::save(outfile);
+	outfile.write((const char*)&listCapacity, sizeof(int));
+	outfile.write((const char*)&listCurrent, sizeof(int));
+	int sizeOfList = listCapacity * sizeof(int);
+	outfile.write((const char*)&listOfEnrolled, sizeOfList);
+	return true;
+}
