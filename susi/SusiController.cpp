@@ -11,8 +11,9 @@ bool SusiController::changeProgram(int _fn, const char* _newProgram)
 		return false;
 	int limit=-1;
 	int studentYear = students[studentId]->getStudentYear();
+	const char** _courseList = programs[programId]->listOfCourseNames(studentYear, limit);
 	return students[studentId]->changeProgram(
-		programs[programId]->listOfCourseNames(studentYear,limit),
+		_courseList,
 		limit,
 		_newProgram
 		);

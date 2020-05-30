@@ -213,7 +213,7 @@ bool Student::changeGroup(int _group)
 {
 	//Сменя групата на студента
 	if (isInterrupted)
-		return false;
+		throw "Fail. The student is interrupted, he can't change group";
 	group = _group;
 	return true;
 }
@@ -221,7 +221,7 @@ bool Student::changeGroup(int _group)
 bool Student::changeYear(int _year)
 {
 	if (isInterrupted)
-		return false;
+		throw "Fail. The student is interrupted, he can't change year";
 	if (_year != year + 1)
 		return false;
 	int counter = 0;
@@ -246,11 +246,13 @@ bool Student::graduate()
 {
 	//Отбелязва студента като завършил
 	if (isInterrupted)
-		return false;
+		throw "Fail. The student is interrupted, he can't graduate";
 	if (isGradauted)
-		return true;
+		throw "Fail. The student has already graduated";
+	if (year < 4)
+		throw "Fail. The student must be year 4 in order to graduate";
 	if (enrolledCurrent != 0)
-		return false;
+		throw "Fail. The student still has courses to complete.";
 	isGradauted = true;
 	return true;
 }
@@ -376,6 +378,8 @@ bool Student::open(std::ifstream& infile)
 
 bool Student::enrollin(const Course& _courseForEnroll)
 {
+	if (isInterrupted)
+		throw "Fail. The student is interrupted, he can't enroll in a new course";
 	if (_courseForEnroll.getNeededYear() > year)
 		return false;
 	if (enrolledCapacity == enrolledCurrent)
@@ -387,6 +391,8 @@ bool Student::enrollin(const Course& _courseForEnroll)
 
 bool Student::addgrade(const char* _course, double _grade)
 {
+	if (isInterrupted)
+		throw "Fail. The student is interrupted, he can't get graded";
 	for (int i = 0; i < enrolledCurrent; i++) {
 		if (currentCourses[i]->hasTheSameName(_course)) {
 			if (!currentCourses[i]->setGrade(_grade))
@@ -430,12 +436,31 @@ bool Student::changeProgram(const char** _courseList, int _limit, const char* _n
 {
 	//Сменя специалността на студента ако е минал всички изпити за специалността, която иска да бъде
 	if (isInterrupted)
-		return false;
+		throw "Fail. The student is interrupted, he can't change program";
 	for (int i = 0; i < enrolledCurrent; i++) {
 		for (int j = 0; j < _limit; j++) {
 			if (currentCourses[i]->hasTheSameName(_courseList[j]))
-				return false;
+				throw "Fail. The student hasen't passed all courses of the new program.";
 		}
+	}
+	if (_limit == -1)
+		return false;
+	bool* found = new bool[_limit];
+	for (int i = 0; i < _limit; i++) {
+		found[i] = false;
+	}
+	for (int i = 0; i < gradedCurrent; i++) {
+		for (int j = 0; j < _limit; j++) {
+			if (gradedCourses[i]->hasTheSameName(_courseList[j]))
+				found[j] = true;
+		}
+	}
+	for (int i = 0; i < _limit; i++) {
+		if (!found[i]) {
+			delete[] found;
+			throw "Fail. The student hasen't passed all courses of the new program.";
+		}
+			
 	}
 	delete[] program;
 	program = new char[strlen(_newProgramName) + 1];

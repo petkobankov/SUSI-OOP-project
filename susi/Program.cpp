@@ -207,7 +207,7 @@ bool Program::open(std::ifstream& infile)
 
 const Course& Program::getCourseByName(const char* _courseName)
 {
-	//Търси дали има курс с такова име в специалността, ако не дава грешка, ако да връща референция 
+	//Търси дали има курс с такова име в специалността, ако не дава грешка, ако да връща референция
 	for (int i = 0; i < coursesCurrent; i++) {
 		if (courses[i]->hasTheSameName(_courseName)) 
 			return *courses[i];
