@@ -22,4 +22,5 @@ public:
 	int getListCurrent()const;
 	const int* getListOfEnrolled()const;
 	bool save(std::ofstream& outfile);
+	bool open(std::ifstream& infile);
 };

@@ -128,3 +128,14 @@ bool ProgramCourse::save(std::ofstream& outfile)
 	outfile.write((const char*)&listOfEnrolled, sizeOfList);
 	return true;
 }
+
+bool ProgramCourse::open(std::ifstream& infile)
+{
+	Course::open(infile);
+	infile.read((char*)&listCapacity, sizeof(int));
+	infile.read((char*)&listCurrent, sizeof(int));
+	int sizeOfList = listCapacity * sizeof(int);
+	listOfEnrolled = new int[listCapacity];
+	infile.read((char*)&listOfEnrolled, sizeOfList);
+	return true;
+}

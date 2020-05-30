@@ -31,5 +31,6 @@ public:
     int getListCapacity(int _id)const;
     int getListCurrent(int _id)const;
     const int* getListOfEnrolled(int _id)const;
-    bool save(std::ofstream& f);
+    bool save(std::ofstream& outfile);
+    bool open(std::ifstream& infile);
 };

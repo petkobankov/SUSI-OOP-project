@@ -8,56 +8,58 @@ int main()
 
     
     char command[LENGTH];
+    SusiController* sys=new SusiController();
+    sys->addProgram("ComputerScience");
+    sys->addCourseForProgram("ComputerScience", "OOP", true, 1);
+    sys->addCourseForProgram("ComputerScience", "DIS", true, 1);
+    sys->addCourseForProgram("ComputerScience", "EAI", true, 1);
+    sys->addCourseForProgram("ComputerScience", "OOP-praktikum", false, 1);
+    sys->addCourseForProgram("ComputerScience", "Dizain-i-analiz-na-algoritmi", true, 2);
 
+    sys->addProgram("SoftwareEngineering");
+    sys->addCourseForProgram("SoftwareEngineering", "DIS", true, 1);
+    sys->addCourseForProgram("SoftwareEngineering", "EAI", true, 1);
+
+    sys->addProgram("Maths");
+    sys->addProgram("Informatics");
+    sys->addProgram("Maths2");
+
+    sys->enroll(81854, "ComputerScience", 7, "Petko");
+    sys->enroll(823, "ComputerScience", 2, "Ivan");
+    sys->enroll(123, "ComputerScience", 1, "Ivana");
+    sys->enroll(22254, "ComputerScience", 7, "Gosho");
+    sys->enroll(354, "ComputerScience", 3, "Petur");
+    sys->enroll(8124, "ComputerScience", 3, "Pavel");
+    sys->enroll(1, "ComputerScience", 3, "Dido");
+
+    sys->enroll(3542, "SoftwareEngineering", 4, "Ivan");
+    sys->enroll(12, "Informatics", 1, "Konstantin");
+    sys->enroll(13, "Maths", 1, "Kristina");
+
+    sys->print(81854);
+    //sys->printall("Computer Science",1);
+
+    sys->enrollin(81854, "Object oriented programing");
+    sys->enrollin(81854, "DIS");
+    sys->enrollin(81854, "OOP praktikum");
+    sys->enrollin(81854, "Dizain i analiz na algoritmi");
+
+    sys->addgrade(81854,"DIS",3.4);
+
+    sys->protocol("DIS");
+
+    sys->report(81854);
     cin >> command;
-    SusiController sys;
-    sys.addProgram("ComputerScience");
-    sys.addCourseForProgram("ComputerScience", "OOP", true, 1);
-    sys.addCourseForProgram("ComputerScience", "DIS", true, 1);
-    sys.addCourseForProgram("ComputerScience", "EAI", true, 1);
-    sys.addCourseForProgram("ComputerScience", "OOP-praktikum", false, 1);
-    sys.addCourseForProgram("ComputerScience", "Dizain-i-analiz-na-algoritmi", true, 2);
-
-    sys.addProgram("SoftwareEngineering");
-    sys.addCourseForProgram("SoftwareEngineering", "DIS", true, 1);
-    sys.addCourseForProgram("SoftwareEngineering", "EAI", true, 1);
-
-    sys.addProgram("Maths");
-    sys.addProgram("Informatics");
-    sys.addProgram("Maths2");
-
-    sys.enroll(81854, "ComputerScience", 7, "Petko");
-    sys.enroll(823, "ComputerScience", 2, "Ivan");
-    sys.enroll(123, "ComputerScience", 1, "Ivana");
-    sys.enroll(22254, "ComputerScience", 7, "Gosho");
-    sys.enroll(354, "ComputerScience", 3, "Petur");
-    sys.enroll(8124, "ComputerScience", 3, "Pavel");
-    sys.enroll(1, "ComputerScience", 3, "Dido");
-
-    sys.enroll(3542, "SoftwareEngineering", 4, "Ivan");
-    sys.enroll(12, "Informatics", 1, "Konstantin");
-    sys.enroll(13, "Maths", 1, "Kristina");
-
-    sys.print(81854);
-    //sys.printall("Computer Science",1);
-
-    sys.enrollin(81854, "Object oriented programing");
-    sys.enrollin(81854, "DIS");
-    sys.enrollin(81854, "OOP praktikum");
-    sys.enrollin(81854, "Dizain i analiz na algoritmi");
-
-    sys.addgrade(81854,"DIS",3.4);
-
-    sys.protocol("DIS");
-
-    sys.report(81854);
     while (strcmp(command, "exit") != 0) {
 
         if (strcmp(command, "open") == 0) {
             char location[1024];
+            cin.ignore();
             cin.getline(location,1024);
             try {
-                if (!sys.open(location))
+                if (!sys->close())
+                    cout << "Something went wrong" << endl;
+                if (!sys->open(location))
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -67,9 +69,9 @@ int main()
         }
         else if (strcmp(command, "close") == 0) {
             try {
-                if (!sys.close())
+                if (!sys->close())
                     cout << "Something went wrong" << endl;
-                
+                sys = new SusiController();
             }
             catch (const char* msg) {
                 cout << msg << endl;
@@ -77,7 +79,7 @@ int main()
         }
         else if (strcmp(command, "save") == 0) {
             try {
-                if (!sys.save())
+                if (!sys->save())
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -86,9 +88,10 @@ int main()
         }
         else if (strcmp(command, "saveas") == 0) {
             char location[1024];
+            cin.ignore();
             cin.getline(location, 1024);
             try {
-                if (!sys.saveas(location))
+                if (!sys->saveas(location))
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -97,7 +100,7 @@ int main()
         }
         else if (strcmp(command, "help") == 0) {
             try {
-                if (!sys.help())
+                if (!sys->help())
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -115,7 +118,7 @@ int main()
             cin >> group;
             cin >> name;
             try {
-                if (!sys.enroll(fn,program,group,name))
+                if (!sys->enroll(fn,program,group,name))
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -126,7 +129,7 @@ int main()
             int fn;
             cin >> fn;
             try {
-                if (!sys.advance(fn))
+                if (!sys->advance(fn))
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -142,7 +145,7 @@ int main()
             cin >> option;
             cin >> value;
             try {
-                if (!sys.change(fn, option, value))
+                if (!sys->change(fn, option, value))
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -155,7 +158,7 @@ int main()
             cin >> fn;
             
             try {
-                if (!sys.graduate(fn))
+                if (!sys->graduate(fn))
                     cout << "Something went wrong" << endl;
             }
             catch (const char* msg) {
@@ -168,7 +171,7 @@ int main()
         cin >> fn;
 
         try {
-            if (!sys.interrupt(fn))
+            if (!sys->interrupt(fn))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -181,7 +184,7 @@ int main()
         cin >> fn;
 
         try {
-            if (!sys.resume(fn))
+            if (!sys->resume(fn))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -194,7 +197,7 @@ int main()
         cin >> fn;
 
         try {
-            if (!sys.print(fn))
+            if (!sys->print(fn))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -208,7 +211,7 @@ int main()
         cin >> year;
 
         try {
-            if (!sys.printall(program,year))
+            if (!sys->printall(program,year))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -222,7 +225,7 @@ int main()
         cin >> course;
 
         try {
-            if (!sys.enrollin(fn, course))
+            if (!sys->enrollin(fn, course))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -238,7 +241,7 @@ int main()
         cin >> grade;
 
         try {
-            if (!sys.addgrade(fn, course,grade))
+            if (!sys->addgrade(fn, course,grade))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -250,7 +253,7 @@ int main()
         cin >> course;
 
         try {
-            if (!sys.protocol(course))
+            if (!sys->protocol(course))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -262,7 +265,7 @@ int main()
         cin >> fn;
 
         try {
-            if (!sys.report(fn))
+            if (!sys->report(fn))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -274,7 +277,7 @@ int main()
         cin >> program;
 
         try {
-            if (!sys.addProgram(program))
+            if (!sys->addProgram(program))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -300,7 +303,7 @@ int main()
         }
 
         try {
-            if (!sys.addCourseForProgram(program,course,isMandatory,year))
+            if (!sys->addCourseForProgram(program,course,isMandatory,year))
                 cout << "Something went wrong" << endl;
         }
         catch (const char* msg) {
@@ -315,5 +318,6 @@ int main()
 
     }
     cout << "Exiting the program..." << endl;
+    delete sys;
 }
 

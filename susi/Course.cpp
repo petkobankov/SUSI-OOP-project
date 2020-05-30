@@ -104,3 +104,16 @@ bool Course::save(std::ofstream& outfile)
 	outfile.write((const char*)&grade, sizeof(double));
 	return true;
 }
+
+bool Course::open(std::ifstream& infile)
+{
+	int nameLen;
+	infile.read((char*)&nameLen, sizeof(int));
+	name = new char[nameLen + 1];
+	infile.read(name, nameLen);
+	name[nameLen] = '\0';
+	infile.read((char*)&mandatory, sizeof(bool));
+	infile.read((char*)&neededYear, sizeof(int));
+	infile.read((char*)&grade, sizeof(double));
+	return true;
+}

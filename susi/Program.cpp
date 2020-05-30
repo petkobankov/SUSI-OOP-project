@@ -183,6 +183,21 @@ bool Program::save(std::ofstream& outfile)
 	return true;
 }
 
+bool Program::open(std::ifstream& infile)
+{
+	int nameLen;
+	infile.read((char*)&nameLen, sizeof(int));
+	name = new char[nameLen+1];
+	infile.read(name, nameLen);
+	name[nameLen] = '\0';
+	infile.read((char*)&coursesCapacity, sizeof(int));
+	infile.read((char*)&coursesCurrent, sizeof(int));
+	for (int i = 0; i < coursesCurrent; i++) {
+		courses[i]->open(infile);
+	}
+	return true;
+}
+
 const Course& Program::getCourseByName(const char* _courseName)
 {
 	//Търси дали има курс с такова име в специалността, ако не дава грешка, ако да връща референция 
