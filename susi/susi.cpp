@@ -1,54 +1,41 @@
 using namespace std;
 #include <iostream>
 #include "SusiController.h"
+#include "Course.h"
+#include "Program.h"
+#include "ProgramCourse.h"
+#include "Student.h"
 const int LENGTH = 13;
 int main()
 {
-    
-
-    
     char command[LENGTH];
     SusiController* sys=new SusiController();
-    sys->addProgram("ComputerScience");
-    sys->addCourseForProgram("ComputerScience", "OOP", true, 1);
-    sys->addCourseForProgram("ComputerScience", "DIS", true, 1);
-    sys->addCourseForProgram("ComputerScience", "EAI", true, 1);
-    sys->addCourseForProgram("ComputerScience", "OOP-praktikum", false, 1);
-    sys->addCourseForProgram("ComputerScience", "Dizain-i-analiz-na-algoritmi", true, 2);
-
+    /*sys->addProgram("ComputerScience");
     sys->addProgram("SoftwareEngineering");
-    sys->addCourseForProgram("SoftwareEngineering", "DIS", true, 1);
-    sys->addCourseForProgram("SoftwareEngineering", "EAI", true, 1);
+    sys->enroll(1, "ComputerScience", 7, "Petko");
+    sys->enroll(2, "SoftwareEngineering", 2, "Pavel");
+    sys->enroll(3, "ComputerScience", 7, "Ivan");
+    sys->enroll(4, "SoftwareEngineering", 1, "Krisi");
 
-    sys->addProgram("Maths");
-    sys->addProgram("Informatics");
-    sys->addProgram("Maths2");
+    sys->addCourseForProgram("ComputerScience", "Program1", true, 1);
+    sys->addCourseForProgram("ComputerScience", "Program2", true, 2);
+    sys->addCourseForProgram("ComputerScience", "Program3", true, 3);
+    sys->addCourseForProgram("ComputerScience", "Program4", true, 4);
+    sys->addCourseForProgram("ComputerScience", "FreeP", false, 1);
+    sys->addCourseForProgram("SoftwareEngineering", "ProgramX", true, 1);
+    sys->addCourseForProgram("SoftwareEngineering", "Program1", true, 1);
 
-    sys->enroll(81854, "ComputerScience", 7, "Petko");
-    sys->enroll(823, "ComputerScience", 2, "Ivan");
-    sys->enroll(123, "ComputerScience", 1, "Ivana");
-    sys->enroll(22254, "ComputerScience", 7, "Gosho");
-    sys->enroll(354, "ComputerScience", 3, "Petur");
-    sys->enroll(8124, "ComputerScience", 3, "Pavel");
-    sys->enroll(1, "ComputerScience", 3, "Dido");
+    sys->enrollin(1, "Program1");
+    sys->enrollin(2, "Program1");
+    sys->enrollin(3, "Program1");
+    sys->enrollin(4, "Program1");
 
-    sys->enroll(3542, "SoftwareEngineering", 4, "Ivan");
-    sys->enroll(12, "Informatics", 1, "Konstantin");
-    sys->enroll(13, "Maths", 1, "Kristina");
-
-    sys->print(81854);
-    //sys->printall("Computer Science",1);
-
-    sys->enrollin(81854, "Object oriented programing");
-    sys->enrollin(81854, "DIS");
-    sys->enrollin(81854, "OOP praktikum");
-    sys->enrollin(81854, "Dizain i analiz na algoritmi");
-
-    sys->addgrade(81854,"DIS",3.4);
-
-    sys->protocol("DIS");
-
-    sys->report(81854);
+    sys->addgrade(3, "Program1", 5);
+    sys->addgrade(1, "Program1", 4);
+    sys->addgrade(4, "Program1", 6);
+    sys->addgrade(2, "Program1", 3);*/
+    
+    
     cin >> command;
     while (strcmp(command, "exit") != 0) {
 

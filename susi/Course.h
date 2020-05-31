@@ -1,10 +1,22 @@
+/**
+ * \class Course
+ *
+ * \brief Учебна дисциплина
+ *
+ * \note Записва данни за взети изпити или просто ако студент е записал дадена дисциплина. Има наследник ProgramCourse който е специяно само за клас Program. Course се използва главно от Student.
+ *
+ */
 #pragma once
 #include <fstream>
-class Course {//Учебната дисциплина
-    char* name; //Име на учебната дисциплина
-    bool mandatory; //true - задължителна false - избираема
-    int neededYear; //в кой курс може да бъде записана
-    double grade; // 2 by default
+class Course {
+    ///Име на учебната дисциплина
+    char* name; 
+    ///true - задължителна false - избираема
+    bool mandatory; 
+    ///в кой курс може да бъде записана
+    int neededYear; 
+    /// 2 by default
+    double grade; 
 
     void free();
     void copyFrom(const Course& other);

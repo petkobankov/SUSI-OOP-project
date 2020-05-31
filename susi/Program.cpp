@@ -140,36 +140,6 @@ const char* Program::getName() const
 	return name;
 }
 
-int Program::getCoursesCapacity() const
-{
-	return coursesCapacity;
-}
-
-int Program::getCoursesCurrent() const
-{
-	return coursesCurrent;
-}
-
-int Program::getListCapacity(int _id) const
-{
-	if (_id < coursesCurrent)
-		return -1;
-	return courses[_id]->getListCapacity();
-}
-
-int Program::getListCurrent(int _id) const
-{
-	if (_id < coursesCurrent)
-		return -1;
-	return courses[_id]->getListCurrent();
-}
-
-const int* Program::getListOfEnrolled(int _id) const
-{
-	if (_id < coursesCurrent)
-		return nullptr;
-	return courses[_id]->getListOfEnrolled();
-}
 
 bool Program::save(std::ofstream& outfile)
 {
@@ -195,19 +165,21 @@ bool Program::open(std::ifstream& infile)
 	strcpy(name, _name);
 	infile.read((char*)&coursesCapacity, sizeof(int));
 	infile.read((char*)&coursesCurrent, sizeof(int));
+	courses = new ProgramCourse *[coursesCapacity];
 	for (int i = 0; i < coursesCapacity; i++) {
+		if(i>= coursesCurrent)
 		courses[i]=nullptr;
-	}
-	for (int i = 0; i < coursesCurrent; i++) {
-		courses[i]=new ProgramCourse();
-		courses[i]->open(infile);
+		else {
+			courses[i] = new ProgramCourse();
+			courses[i]->open(infile);
+		}
 	}
 	return true;
 }
 
 const Course& Program::getCourseByName(const char* _courseName)
 {
-	//Търси дали има курс с такова име в специалността, ако не дава грешка, ако да връща референция
+	///Търси дали има курс с такова име в специалността, ако не дава грешка, ако да връща референция
 	for (int i = 0; i < coursesCurrent; i++) {
 		if (courses[i]->hasTheSameName(_courseName)) 
 			return *courses[i];

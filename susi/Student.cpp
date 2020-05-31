@@ -205,13 +205,13 @@ int Student::getFn() const
 
 bool Student::advance()
 {
-	//Студента продължава следващия курс
+	
 	return changeYear(year+1);
 }
 
 bool Student::changeGroup(int _group)
 {
-	//Сменя групата на студента
+	
 	if (isInterrupted)
 		throw "Fail. The student is interrupted, he can't change group";
 	group = _group;
@@ -381,7 +381,7 @@ bool Student::enrollin(const Course& _courseForEnroll)
 	if (isInterrupted)
 		throw "Fail. The student is interrupted, he can't enroll in a new course";
 	if (_courseForEnroll.getNeededYear() > year)
-		return false;
+		throw "This course is not for the intended year.";
 	if (enrolledCapacity == enrolledCurrent)
 		resizeEnrolled();
 	currentCourses[enrolledCurrent++] = new Course(_courseForEnroll);

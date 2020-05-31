@@ -2,13 +2,14 @@
 #include <cstring>
 #include <iostream>
 #include <fstream>
+using namespace std;
 bool SusiController::changeProgram(int _fn, const char* _newProgram)
 {
 	//Помощна функция която взима имената на учебните дисцпилини, които са за курса който е студента или за по-малки курсове и ги праща на обекта студент който ще използва инфомрацията да сфери дали може да се прехвърли
 	int studentId = findStudentByFn(_fn);
 	int programId = findProgramByName(_newProgram);
 	if (programId < 0)
-		return false;
+		throw "Program not found.";
 	int limit=-1;
 	int studentYear = students[studentId]->getStudentYear();
 	const char** _courseList = programs[programId]->listOfCourseNames(studentYear, limit);
@@ -162,6 +163,7 @@ bool SusiController::enroll(int _fn, const char* _program, int _group, const cha
 	if (studentsCurrent == studentsCapacity)
 		resizeStudents();
 	students[studentsCurrent++] = new Student(_fn,_program,_group,1,_name);
+	cout << "Successfully enrolled " << _name << endl;
 	return true;
 }
 
@@ -170,8 +172,11 @@ bool SusiController::advance(int _fn)
 	//Записва студента в следващ курс
 	int id = findStudentByFn(_fn);
 	if (id < 0)
+		throw "Student not found.";
+	if (!students[id]->advance())
 		return false;
-	return students[id]->advance();
+	else
+		cout << "Successfully advanced " << students[id]->getName() << endl;
 }
 
 bool SusiController::change(int _fn, const char* option, const char* value)
@@ -179,13 +184,25 @@ bool SusiController::change(int _fn, const char* option, const char* value)
 	//Прехвърля студента с даден факултетен номер в нова специялност/група/курс
 	int id = findStudentByFn(_fn);
 	if (id < 0)
-		return false;
-	if (strcmp(option, "group") == 0)
-		return students[id]->changeGroup(atoi(value));
-	if (strcmp(option, "program") == 0)
-		return changeProgram(_fn,value);
-	if (strcmp(option, "year") == 0)
-		return students[id]->changeYear(atoi(value));
+		throw "Student not found.";
+	if (strcmp(option, "group") == 0) {
+		if (!students[id]->changeGroup(atoi(value)))
+			return false;
+		else
+			cout << "Successfully changed group to " << value << endl;
+	}
+	if (strcmp(option, "program") == 0) {
+		if (!changeProgram(_fn, value))
+			return false;
+		else
+			cout << "Successfully changed program to " << value << endl;
+	}
+	if (strcmp(option, "year") == 0) {
+		if (!students[id]->changeYear(atoi(value)))
+			return false;
+		else
+			cout << "Successfully changed year to " << value << endl;
+	}
 	return false;
 }
 
@@ -194,8 +211,11 @@ bool SusiController::graduate(int _fn)
 	//Ако съществува такъв студент извикваме функцията му за завършване
 	int id = findStudentByFn(_fn);
 	if (id < 0)
+		throw "Student not found.";
+	if (!students[id]->graduate())
 		return false;
-	return students[id]->graduate();
+	else
+		cout << "Successfully graduated!" << endl;
 }
 
 bool SusiController::interrupt(int _fn)
@@ -203,8 +223,11 @@ bool SusiController::interrupt(int _fn)
 	//Маркира студент като прекъснал
 	int id = findStudentByFn(_fn);
 	if (id < 0)
+		throw "Student not found.";
+	if (!students[id]->interrupt())
 		return false;
-	return students[id]->interrupt();
+	else
+		cout << "Student "<< students[id]->getName() << " is now interrupted." << endl;
 }
 
 bool SusiController::resume(int _fn)
@@ -212,8 +235,11 @@ bool SusiController::resume(int _fn)
 	//Маха маркировката като прекъснал
 	int id = findStudentByFn(_fn);
 	if (id < 0)
+		throw "Student not found.";
+	if (!students[id]->resume())
 		return false;
-	return students[id]->resume();
+	else
+		cout << "Student " << students[id]->getName() << " has now resumed his studies." << endl;
 }
 
 bool SusiController::print(int _fn)
@@ -221,7 +247,7 @@ bool SusiController::print(int _fn)
 	//Извежда справка за студент
 	int id = findStudentByFn(_fn);
 	if (id < 0)
-		return false;
+		throw "Student not found.";
 	return students[id]->print();
 }
 
@@ -247,7 +273,10 @@ bool SusiController::enrollin(int _fn, const char* _courseName)
 	const Course & foundCourse = programs[programId]->getCourseByName(_courseName);
 	if (!students[studentId]->enrollin(foundCourse))
 		return false;
-	return programs[programId]->enrollStudent(_courseName, _fn);
+	if (!programs[programId]->enrollStudent(_courseName, _fn))
+		return false;
+	else
+		cout << "Student " << students[studentId]->getName() << " is now enrolled in "<< _courseName<<"." << endl;
 	}
 	catch (bool error) {
 		return error;
@@ -259,8 +288,11 @@ bool SusiController::addgrade(int _fn, const char* _course, double _grade)
 {
 	int studentId = findStudentByFn(_fn);
 	if (studentId < 0)
+		throw "Student not found.";
+	if (!students[studentId]->addgrade(_course, _grade))
 		return false;
-	return students[studentId]->addgrade(_course, _grade);
+	else
+		cout << "Successfully added grade!" << endl;
 }
 
 bool SusiController::protocol(const char* _course) const
@@ -275,7 +307,7 @@ bool SusiController::report(int _fn) const
 {
 	int studentId = findStudentByFn(_fn);
 	if (studentId < 0)
-		return false;
+		throw "Student not found.";
 	return students[studentId]->report();
 }
 
@@ -284,6 +316,7 @@ bool SusiController::addProgram(const char* _name)
 	if (programsCapacity == programsCurrent)
 		resizePrograms();
 	programs[programsCurrent++] = new Program(_name);
+	cout << "Successfully added program." << endl;
 	return true;
 }
 
@@ -291,8 +324,11 @@ bool SusiController::addCourseForProgram(const char* _programName,const char* _c
 {
 	int programId = findProgramByName(_programName);
 	if (programId < 0)
+		throw "Program not found.";
+	if (!programs[programId]->addCourse(_courseName, _isMandatory, _neededYear))
 		return false;
-	return programs[programId]->addCourse(_courseName,_isMandatory, _neededYear);
+	else
+		cout << "Successfully added course "<< _courseName <<" for program." << endl;
 }
 
 bool SusiController::saveas(const char* _location)
@@ -337,14 +373,15 @@ bool SusiController::saveas(const char* _location)
 
 bool SusiController::open(const char* _location)
 {
+	const char* fileName = getFileName(_location);
+	if (strstr(fileName, ".susi") == nullptr)
+		throw "Invalid file type. Only \".susi\" files are accepted.";;
 	delete[] location;
 	int locationLen = strlen(_location);
 	location = new char[locationLen + 1];
 	strcpy(location, _location);
 	location[locationLen] = '\0';
-	const char* fileName = getFileName(_location);
-	if (strstr(fileName, ".susi") == nullptr)
-		throw "Invalid file type. Only \".susi\" files are accepted.";
+	
 	std::ifstream infile(location,std::ios::in|std::ios::binary);
 	if (!infile.is_open()) {
 		//Това е когато няма такъв файл. Тогава се създава нов на негово място, който е празен.
@@ -413,7 +450,6 @@ const bool SusiController::isLoaded() const
 
 bool SusiController::help()const
 {
-	using namespace std;
 	std::cout << "The following commands are supported: " << endl;
 	std::cout << "open <file>" << "    " << "opens <file>" << endl;
 	std::cout << "close" << "    " << "closes currently opened file" << endl;

@@ -1,3 +1,11 @@
+/**
+ * \class ProgramCourse
+ *
+ * \brief Учебна дисциплина за специалност
+ *
+ * \note Този клас има информацията като всяка друга учебна дисциплина, само че пази факултетните номера на студентите записани.
+ *
+ */
 #pragma once
 #include "Course.h"
 class ProgramCourse: public Course {
@@ -17,10 +25,6 @@ public:
 	ProgramCourse(const char* _name, bool _isMandatory, int neededYear);
 	bool addFn(int _fn);
 	bool protocol()const;
-
-	int getListCapacity()const;
-	int getListCurrent()const;
-	const int* getListOfEnrolled()const;
 	bool save(std::ofstream& outfile);
 	bool open(std::ifstream& infile);
 };

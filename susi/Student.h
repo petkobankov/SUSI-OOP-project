@@ -1,23 +1,42 @@
+/**
+ * \class Student
+ *
+ * \brief Студент
+ *
+ * \note Клас който пази информация нужна за всеки студент.
+ *
+ */
 #pragma once
 #include "Course.h"
 class Student {
-    char* name; // Име
+    /// Име
+    char* name; 
+    ///Дали е завършил
     bool isGradauted;
+    ///Дали е прекъснал
     bool isInterrupted;
-    int fn; // Факултетен номер
-    int group; // Група
-    int year;//Текущо записан курс
-    char* program; // специалност
-    double averageGrade; // Среден успех от следването до момента
+    /// Факултетен номер
+    int fn; 
+    /// Група
+    int group; 
+    ///Текущо записан курс
+    int year;
+    /// Специалност
+    char* program; 
+    /// Среден успех от следването до момента
+    double averageGrade; 
     int enrolledCapacity;
     int enrolledCurrent;
     int gradedCapacity;
     int gradedCurrent;
-    Course** currentCourses; // Всички записани дисциплини на студента на които не е положил изпит
-    Course** gradedCourses; // Всички записани дисциплини на студента на които е положил успешно изпит
+    /// Всички записани дисциплини на студента на които не е положил изпит
+    Course** currentCourses; 
+    /// Всички записани дисциплини на студента на които е положил успешно изпит
+    Course** gradedCourses; 
 
     void free();
     void copyFrom(const Student& other);
+    ///Използва се когато се добави нова дисциплина или оценка за дисциплина
     bool updateAverageGrade();
     bool resizeEnrolled();
     bool resizeGraded();
@@ -28,17 +47,28 @@ public:
     ~Student();
 
     Student(int _fn,const char* _program,int _group, int year,const char* _name);
+    ///Студента продължава следващия курс
     bool advance();
+    ///Сменя групата на студента
     bool changeGroup(int _group);
+    ///Сменя курса на студента
     bool changeYear(int _year);
+    ///Сменя програмата на студента
     bool changeProgram(const char** _courseList, int _limit,const char* _newProgramName);
+    ///Маркира студента като завършил
     bool graduate();
+    ///Маркира студента като прекъснал
     bool interrupt();
+    ///Връща студентските права на студента
     bool resume();
+    ///Изписва информация за студента като име, факултетен номер ...
     bool print()const;
     bool isForProgramYear(const char* _programName, int _year)const;
+    ///Записва студента в дадена дисциплина
     bool enrollin(const Course& _courseForEnroll);
+    ///Оценява дадена дисциплина
     bool addgrade(const char* _course, double _grade);
+    ///Академична справка за студента
     bool report()const;
 
     const char* getName()const;
