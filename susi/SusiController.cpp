@@ -175,8 +175,11 @@ bool SusiController::advance(int _fn)
 		throw "Student not found.";
 	if (!students[id]->advance())
 		return false;
-	else
+	else {
 		cout << "Successfully advanced " << students[id]->getName() << endl;
+		return true;
+	}
+		
 }
 
 bool SusiController::change(int _fn, const char* option, const char* value)
@@ -214,8 +217,11 @@ bool SusiController::graduate(int _fn)
 		throw "Student not found.";
 	if (!students[id]->graduate())
 		return false;
-	else
+	else {
 		cout << "Successfully graduated!" << endl;
+		return true;
+	}
+		
 }
 
 bool SusiController::interrupt(int _fn)
@@ -226,8 +232,11 @@ bool SusiController::interrupt(int _fn)
 		throw "Student not found.";
 	if (!students[id]->interrupt())
 		return false;
-	else
-		cout << "Student "<< students[id]->getName() << " is now interrupted." << endl;
+	else {
+		cout << "Student " << students[id]->getName() << " is now interrupted." << endl;
+		return true;
+	}
+		
 }
 
 bool SusiController::resume(int _fn)
@@ -238,8 +247,11 @@ bool SusiController::resume(int _fn)
 		throw "Student not found.";
 	if (!students[id]->resume())
 		return false;
-	else
+	else {
 		cout << "Student " << students[id]->getName() << " has now resumed his studies." << endl;
+		return true;
+	}
+		
 }
 
 bool SusiController::print(int _fn)
@@ -291,8 +303,11 @@ bool SusiController::addgrade(int _fn, const char* _course, double _grade)
 		throw "Student not found.";
 	if (!students[studentId]->addgrade(_course, _grade))
 		return false;
-	else
+	else {
 		cout << "Successfully added grade!" << endl;
+		return true;
+	}
+		
 }
 
 bool SusiController::protocol(const char* _course) const
@@ -327,8 +342,11 @@ bool SusiController::addCourseForProgram(const char* _programName,const char* _c
 		throw "Program not found.";
 	if (!programs[programId]->addCourse(_courseName, _isMandatory, _neededYear))
 		return false;
-	else
-		cout << "Successfully added course "<< _courseName <<" for program." << endl;
+	else {
+		cout << "Successfully added course " << _courseName << " for program." << endl;
+		return true;
+	}
+		
 }
 
 bool SusiController::saveas(const char* _location)
