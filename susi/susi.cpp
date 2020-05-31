@@ -38,7 +38,10 @@ int main()
     
     cin >> command;
     while (strcmp(command, "exit") != 0) {
-
+        while (strcmp(command, "open") != 0 && !sys->isLoaded() && strcmp(command, "exit") != 0) {
+            cout << "You need to first open a file. If the file does not exist, the program will create one with that name. It should end in .susi" << endl;
+            cin >> command;
+        }
         if (strcmp(command, "open") == 0) {
             char location[1024];
             cin.ignore();
@@ -296,6 +299,10 @@ int main()
         catch (const char* msg) {
             cout << msg << endl;
         }
+        }
+        else if (strcmp(command, "exit") == 0) {
+        delete sys;
+        return 1;
         }
         else {
             cout << "Invalid command" << endl;
